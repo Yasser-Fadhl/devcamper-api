@@ -2,7 +2,31 @@ const ErrorResponse = require("../utils/errorResponse");
 const Bootcamp = require("../models/Bootcamp");
 const asyncHandler = require("../middleware/async");
 exports.FetchBootCamps = asyncHandler(async (req, res, next) => {
-  const bootcamps = await Bootcamp.find();
+  let query;
+  // Copy req.query
+  const reqQuery = { ...req.query };
+  // Fields to exclude
+  const removeFields = ["select", "sort"];
+  // Loop over removed fields and delete them from reqQuery
+  removeFields.forEach((field) => delete reqQuery[field]);
+  let queryStr = JSON.stringify(reqQuery);
+  queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
+  query = Bootcamp.find(JSON.parse(queryStr));
+
+  // Select Fields
+  if (req.query.select) {
+    const selectedFields = req.query.select.split(",").join(" ");
+    query = query.select(selectedFields);
+  }
+  // Sort fields
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    console.log(sortBy);
+    query = query.sort(sortBy);
+  } else {
+    query = query.sort("-createdAt");
+  }
+  const bootcamps = await query;
 
   res.status(200).json({
     success: true,
