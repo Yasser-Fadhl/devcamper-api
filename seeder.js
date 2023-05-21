@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
 
 const BootcampSchema = require("./models/Bootcamp");
-
+const CourseSchema = require("./models/Course");
 // connect to db
 mongoose.connect(process.env.LOCAL_DB);
 
@@ -13,11 +13,15 @@ mongoose.connect(process.env.LOCAL_DB);
 const bootcamps = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/bootcamps.json`, `utf-8`)
 );
+const courses = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/courses.json`, `utf-8`)
+);
 
 // Import into DB
 const importData = async () => {
   try {
     await BootcampSchema.create(bootcamps);
+    await CourseSchema.create(courses);
     console.log("Data has been imported Successfully".green.inverse);
     process.exit();
   } catch (err) {
@@ -28,6 +32,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await BootcampSchema.deleteMany();
+    await CourseSchema.deleteMany();
     console.log("Data has been deleted Successfully".red.inverse);
     process.exit();
   } catch (err) {
