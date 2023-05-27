@@ -4,7 +4,7 @@ const errorHandler = (err, req, res, next) => {
 
   error.message = err.message;
 
-  console.log(err.errors);
+  // console.log(err.errors);
   // console.log(err.name.bold);
   if (err.name === "ValidationError") {
     const message = Object.values(err.errors).map((value) => value.message);

@@ -2,6 +2,7 @@ require("colors");
 const express = require("express");
 const connectDB = require("./config/db");
 const bootCamps = require("./routes/bootcamps");
+const courses = require("./routes/courses");
 const errorHandler = require("./middleware/errorHandler");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
@@ -12,6 +13,7 @@ connectDB();
 //Body parser
 app.use(express.json());
 app.use("/api/v1/bootcamps", bootCamps);
+app.use("/api/v1/courses", courses);
 
 app.use(errorHandler);
 const port = process.env.PORT || 8080;

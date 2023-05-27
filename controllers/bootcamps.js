@@ -1,5 +1,6 @@
 const ErrorResponse = require("../utils/errorResponse");
 const Bootcamp = require("../models/Bootcamp");
+require("mongoose");
 const asyncHandler = require("../middleware/async");
 exports.FetchBootCamps = asyncHandler(async (req, res, next) => {
   let query;
@@ -11,7 +12,8 @@ exports.FetchBootCamps = asyncHandler(async (req, res, next) => {
   removeFields.forEach((field) => delete reqQuery[field]);
   let queryStr = JSON.stringify(reqQuery);
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
-  query = Bootcamp.find(JSON.parse(queryStr));
+
+  query = Bootcamp.find(JSON.parse(queryStr)).populate("courses");
 
   // Select Fields
   if (req.query.select) {
@@ -21,7 +23,7 @@ exports.FetchBootCamps = asyncHandler(async (req, res, next) => {
   // Sort fields
   if (req.query.sort) {
     const sortBy = req.query.sort.split(",").join(" ");
-    console.log(sortBy);
+    // console.log(sortBy);
     query = query.sort(sortBy);
   } else {
     query = query.sort("-createdAt");
@@ -80,13 +82,14 @@ exports.UpdateBootCamp = asyncHandler(async (req, res, next) => {
   });
 });
 exports.DeleteBootCamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
 
   if (!bootcamp) {
     return next(
       new ErrorResponse(`Boocamp with ID ${req.params.id} is not found`, 404)
     );
   }
+  await bootcamp.remove();
 
   res.status(200).json({
     success: true,

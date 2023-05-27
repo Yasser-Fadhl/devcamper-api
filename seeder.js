@@ -7,7 +7,12 @@ dotenv.config({ path: "./config/config.env" });
 const BootcampSchema = require("./models/Bootcamp");
 const CourseSchema = require("./models/Course");
 // connect to db
-mongoose.connect(process.env.LOCAL_DB);
+mongoose.connect(process.env.LOCAL_DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
 
 // Read Json Files
 const bootcamps = JSON.parse(
@@ -21,7 +26,7 @@ const courses = JSON.parse(
 const importData = async () => {
   try {
     await BootcampSchema.create(bootcamps);
-    await CourseSchema.create(courses);
+    // await CourseSchema.create(courses);
     console.log("Data has been imported Successfully".green.inverse);
     process.exit();
   } catch (err) {
