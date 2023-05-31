@@ -1,10 +1,12 @@
 require("colors");
 const express = require("express");
+const fileupload = require("express-fileupload");
 const connectDB = require("./config/db");
 const bootCamps = require("./routes/bootcamps");
 const courses = require("./routes/courses");
 const errorHandler = require("./middleware/errorHandler");
 const dotenv = require("dotenv");
+const path = require("path");
 dotenv.config({ path: "./config/config.env" });
 const app = express();
 
@@ -12,6 +14,14 @@ connectDB();
 
 //Body parser
 app.use(express.json());
+
+//File Uploading
+app.use(fileupload());
+
+//Set static folder
+app.use(express.static(path.join(__dirname, "public")));
+
+//routers
 app.use("/api/v1/bootcamps", bootCamps);
 app.use("/api/v1/courses", courses);
 
