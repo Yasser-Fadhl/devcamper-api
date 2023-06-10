@@ -1,6 +1,7 @@
 require("colors");
 const express = require("express");
 const fileupload = require("express-fileupload");
+const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const bootCamps = require("./routes/bootcamps");
 const courses = require("./routes/courses");

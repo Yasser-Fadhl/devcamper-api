@@ -9,6 +9,7 @@ const {
   DeleteBootCamp,
   UploadBootCampPhoto,
 } = require("../controllers/bootcamps");
+const { protect, authorize } = require("../middleware/protect");
 const Course = require("../models/Course");
 const advancedResults = require("../middleware/advancedResults");
 const Bootcamp = require("../models/Bootcamp");
@@ -17,11 +18,13 @@ router.use("/:bootcampId/courses", courseRouter);
 router
   .route("/")
   .get(advancedResults(Bootcamp, "courses"), FetchBootCamps)
-  .post(CreateBootCamps);
+  .post(protect, authorize("publisher", "admin"), CreateBootCamps);
 router
   .route("/:id")
   .get(FetchBootCamp)
-  .put(UpdateBootCamp)
-  .delete(DeleteBootCamp);
-router.put("/:id/photo", UploadBootCampPhoto);
+  .put(protect, authorize("publisher", "admin"), UpdateBootCamp)
+  .delete(protect, authorize("publisher", "admin"), DeleteBootCamp);
+router
+  .route("/:id/photo")
+  .put(protect, authorize("publisher", "admin"), UploadBootCampPhoto);
 module.exports = router;
