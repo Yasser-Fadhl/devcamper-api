@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const courseRouter = require("./courses");
+const reviewsRouter = require("./reviews");
 const {
   FetchBootCamps,
   CreateBootCamps,
@@ -14,6 +15,7 @@ const Course = require("../models/Course");
 const advancedResults = require("../middleware/advancedResults");
 const Bootcamp = require("../models/Bootcamp");
 router.use("/:bootcampId/courses", courseRouter);
+router.use("/:bootcampId/reviews", reviewsRouter);
 
 router
   .route("/")
