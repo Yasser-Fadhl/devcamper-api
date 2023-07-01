@@ -11,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(message, 400);
   }
   if (err.name === "CastError") {
-    const message = `Boocamp with ID ${err.value} is not found`;
+    const message = `Resource is not found`;
     error = new Error(message, 404);
   }
   if (err.code === 11000) {
