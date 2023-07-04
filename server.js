@@ -1,6 +1,7 @@
 require("colors");
 const express = require("express");
 const fileupload = require("express-fileupload");
+const mongoSanitizer = require("express-mongo-sanitize");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const bootCamps = require("./routes/bootcamps");
@@ -18,6 +19,9 @@ connectDB();
 
 //Body parser
 app.use(express.json());
+
+//Sanitize Data
+app.use(mongoSanitizer());
 
 app.use(cookieParser());
 //File Uploading
