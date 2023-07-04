@@ -19,6 +19,7 @@ connectDB();
 //Body parser
 app.use(express.json());
 
+app.use(cookieParser());
 //File Uploading
 app.use(fileupload());
 

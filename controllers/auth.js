@@ -26,6 +26,17 @@ exports.Login = asyncHandler(async (req, res, next) => {
   sendTokenResponse(user, 200, res);
 });
 
+exports.Logout = asyncHandler(async (req, res, next) => {
+  res.cookie("token", "none", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
 exports.getMe = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
   res.status(200).json({
@@ -124,9 +135,10 @@ const sendTokenResponse = (user, statusCode, res) => {
       Date.now() + process.env.COOKIE_EXPIRY * 60 * 60 * 24 * 1000
     ),
   };
-  if (process.env.NODE_ENV) {
+  if (process.env.NODE_ENV === "production") {
     options.secure = true;
   }
+
   res.status(statusCode).cookie("token", token, options).json({
     success: true,
     token,
