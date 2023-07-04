@@ -2,6 +2,8 @@ require("colors");
 const express = require("express");
 const fileupload = require("express-fileupload");
 const mongoSanitizer = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const Xss = require("xss-clean");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const bootCamps = require("./routes/bootcamps");
@@ -23,6 +25,10 @@ app.use(express.json());
 //Sanitize Data
 app.use(mongoSanitizer());
 
+// Set Security headers
+app.use(helmet());
+// Prevent XSS attacks
+app.use(Xss());
 app.use(cookieParser());
 //File Uploading
 app.use(fileupload());
