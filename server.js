@@ -4,6 +4,10 @@ const fileupload = require("express-fileupload");
 const mongoSanitizer = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const Xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
+const cors = require("cors");
+
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const bootCamps = require("./routes/bootcamps");
@@ -27,9 +31,25 @@ app.use(mongoSanitizer());
 
 // Set Security headers
 app.use(helmet());
+
 // Prevent XSS attacks
 app.use(Xss());
+
+//Rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 100,
+});
+app.use(limiter);
+
+//Prevent http params pollution
+app.use(hpp());
+
+app.use(cors());
+
+// Cookie Parser
 app.use(cookieParser());
+
 //File Uploading
 app.use(fileupload());
 
