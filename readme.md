@@ -34,10 +34,4 @@ node seeder -d
 node seeder -i
 ```
 
-## Demo
-
-Extensive documentation with examples [here](https://documenter.getpostman.com/view/8923145/SVtVVTzd?version=latest)
-
 - Version: 1.0.0
-- License: MIT
-- Author: Brad Traversy
