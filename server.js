@@ -7,7 +7,6 @@ const Xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
 const cors = require("cors");
-
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const bootCamps = require("./routes/bootcamps");
@@ -20,7 +19,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 dotenv.config({ path: "./config/config.env" });
 const app = express();
-
+//
 connectDB();
 
 //Body parser
