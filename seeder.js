@@ -9,7 +9,7 @@ const CourseSchema = require("./models/Course");
 const UserSchema = require("./models/User");
 const ReviewSchema = require("./models/Review");
 // connect to db
-mongoose.connect(process.env.LOCAL_DB, {
+mongoose.connect(process.env.REMOTE_DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,

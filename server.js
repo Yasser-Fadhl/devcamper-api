@@ -20,7 +20,9 @@ const path = require("path");
 dotenv.config({ path: "./config/config.env" });
 const app = express();
 //
-connectDB();
+const mongoose = require("mongoose");
+
+//connectDB();
 
 //Body parser
 app.use(express.json());
@@ -64,13 +66,33 @@ app.use("/api/v1/reviews", reviews);
 
 app.use(errorHandler);
 const port = process.env.PORT || 8080;
-const server = app.listen(
-  port,
-  console.log(
-    `Server is running on port ${port} in ${process.env.NODE_ENV} mode`.blue
-      .bold
-  )
-);
+
+mongoose
+  .connect(process.env.REMOTE_DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
+  .then(() => {
+    console.log(`Connected to MongoDB: `.cyan.underline.bold);
+    app.listen(
+      port,
+      console.log(
+        `Server is running on port ${port} in ${process.env.NODE_ENV} mode`.blue
+          .bold
+      )
+    );
+  })
+  .catch((ex) => console.log(`Error: ${ex.message}`));
+
+// const server = app.listen(
+//   port,
+//   console.log(
+//     `Server is running on port ${port} in ${process.env.NODE_ENV} mode`.blue
+//       .bold
+//   )
+// );
 
 process.on("unhandledRejection", (err, promise) => {
   console.log(`Error: ${err.message}`);
